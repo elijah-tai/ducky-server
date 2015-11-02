@@ -3,14 +3,17 @@
 // dependencies
 var express = require('express'),
 		mongoose = require('mongoose'),
-		path = require('path')
+		path = require('path'),
+    requestsController = require('./controllers/requests-controller')
 
 // create instance of express
 var app = express()
 var routes = require('./routes/api.js')
 
 // routes
-app.use('/user/', routes)
+
+// Need to figure out how user models are created
+// app.use('/user/', routes) 
 
 app.get('/api/requests', requestsController.list)
 app.get('/api/requests', requestsController.create)
