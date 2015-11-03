@@ -41,7 +41,7 @@ app.get('/api/conversations', conversationsController.list)
 app.post('/api/conversations', conversationsController.create)
 
 app.post('/api/conversations:_id', conversationsController.add) // adds message to convo
-app.delete('/api/conversations', conversationsController.delete)
+app.delete('/api/conversations:_id', conversationsController.delete)
 
 // error hndlers
 app.use(function(req, res, next) {
