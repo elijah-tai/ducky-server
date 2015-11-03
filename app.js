@@ -5,8 +5,8 @@ var express = require('express'),
 		mongoose = require('mongoose'),
 		path = require('path'),
     bodyParser = require('body-parser'),
-    requestsController = require('./controllers/requests-controller')
-
+    requestsController = require('./controllers/requests-controller'),
+    usersController = require('./controllers/users-controller')
 // mongoose
 // should really be using process.env.MONGOLAB_URI instead...
 mongoose.connect('mongodb://duckydev:DuckyDev2015@ds049104.mongolab.com:49104/duckyapp-dev' || 'mongodb://localhost/duckyapp-dev');
@@ -26,6 +26,11 @@ app.use(bodyParser.json());
 app.use('/api', routes)
 app.get('/api/requests', requestsController.list)
 app.post('/api/requests', requestsController.create)
+app.delete('/api/requests:_id', requestsController.delete)
+
+app.get('/api/users', usersController.list)
+app.post('/api/users', usersController.create)
+app.delete('/api/users', usersController.delete)
 
 // error hndlers
 app.use(function(req, res, next) {

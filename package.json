@@ -1,7 +1,7 @@
 {
   "name": "ducky-server",
   "scripts": {
-    "start": "node server.js"
+    "start": "./node_modules/.bin/supervisor server/server.js"
   },
   "dependencies": {
     "debug": "^2.0.0",
