@@ -4,7 +4,7 @@ Core backend server for Ducky in Node.js. See all routes in ```./app.js```.
 
 ```
 npm install
-node server.js # Should be running on port 3000
+supervisor server.js # Should be running on port 3000
 ```
 
 ## To create a request:
