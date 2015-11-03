@@ -9,7 +9,7 @@ module.exports.create = function (req, res) {
 	})
 }
 
-module.exports.list = function (req, res, user) {
+module.exports.list = function (req, res) {
 	Request.find({}, function (err, results) {
 		res.json(results)
 	})
@@ -17,8 +17,8 @@ module.exports.list = function (req, res, user) {
 
 module.exports.delete = function (req, res) {
 	if (req.params.id !== null || req.params.id !== undefined) {
-		Request.remove({ _id: req.params.id}, function (err) {
-			res.send(200)
+		Request.remove({ _id: req.params._id}, function (err) {
+			res.sendStatus(200)
 		})
 	}
 }

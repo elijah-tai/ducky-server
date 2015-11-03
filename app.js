@@ -6,7 +6,8 @@ var express = require('express'),
 		path = require('path'),
     bodyParser = require('body-parser'),
     requestsController = require('./controllers/requests-controller'),
-    usersController = require('./controllers/users-controller')
+    usersController = require('./controllers/users-controller'),
+    conversationsController = require('./controllers/conversations-controller')
 // mongoose
 // should really be using process.env.MONGOLAB_URI instead...
 mongoose.connect('mongodb://duckydev:DuckyDev2015@ds049104.mongolab.com:49104/duckyapp-dev' || 'mongodb://localhost/duckyapp-dev');
@@ -24,13 +25,23 @@ app.use(bodyParser.json());
 // ==============================================
 // Need to figure out how user models are created
 app.use('/api', routes)
+
+
 app.get('/api/requests', requestsController.list)
 app.post('/api/requests', requestsController.create)
 app.delete('/api/requests:_id', requestsController.delete)
 
+
 app.get('/api/users', usersController.list)
 app.post('/api/users', usersController.create)
-app.delete('/api/users', usersController.delete)
+app.delete('/api/users:_id', usersController.delete)
+
+
+app.get('/api/conversations', conversationsController.list)
+app.post('/api/conversations', conversationsController.create)
+
+app.post('/api/conversations:_id', conversationsController.add) // adds message to convo
+app.delete('/api/conversations', conversationsController.delete)
 
 // error hndlers
 app.use(function(req, res, next) {

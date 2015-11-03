@@ -6,9 +6,10 @@ var mongoose = require('mongoose'),
 
 var Request = new Schema({
 	// need to add date
-	asker: String, // username
-	requestContent: String, 
-	location: String,
+	a: String, // asker user id
+	r: String, // request content
+	l: String, // request location - might be lat/long
+	c: [Number], // ids of associated conversations
 	time: { type: Date, default: Date.now }
 })
 

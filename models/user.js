@@ -4,8 +4,12 @@ var mongoose = require('mongoose'),
 		Schema = mongoose.Schema
 
 var User = new Schema({
-	deviceID: String,
-	username: String
+	d: String, // device ID
+	u: String, // username
+	p: {
+		r: [String], // IDs of requests
+		c: [Array] // IDs of conversations
+	}
 })
 
 module.exports = mongoose.model('users', User)

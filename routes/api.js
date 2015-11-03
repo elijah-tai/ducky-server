@@ -9,10 +9,4 @@ router.get('/', function(req, res) {
   res.json({ message: 'Welcome to the Ducky API.'})
 })
 
-router.post('/register', function(req, res) {
-	res.json({
-		message: 'Ready to register?'
-	})
-})
-
 module.exports = router
