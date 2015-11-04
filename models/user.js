@@ -6,8 +6,9 @@ var mongoose = require('mongoose'),
 		Schema = mongoose.Schema
 
 var User = new Schema({
-	d: String, // device ID
-	u: String, // username
+	fn: String, // first name
+	fid: Number, // facebook ID
+	pp: String // profile picture URL
 	p: {
 		r: [Request.schema], // IDs of requests
 		c: [Conversation.schema] // IDs of conversations
