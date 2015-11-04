@@ -74,6 +74,7 @@ var Message = new Schema({
 
 ### TODO:
 - [ ] Put Objectids of Users instead of strings for Users in Conversation/Messsage/Request schemas instead of strings
+- [ ] FB auth
 
 
 \* The ```_id``` is the Objectid in MongoDB.
