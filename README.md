@@ -93,6 +93,7 @@ var Message = new Schema({
 ### TODO:
 - [ ] Put Objectids of Users instead of strings for Users in Conversation/Messsage/Request schemas instead of strings
 - [ ] FB auth
+- [ ] error handling for when no db object exist (see fb convo)
 
 
 \* The ```_id``` is the Objectid in MongoDB.
