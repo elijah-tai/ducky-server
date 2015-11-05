@@ -53,7 +53,7 @@ var User = new Schema({
 ```GET``` to ```/api/users```.
 
 ## To see all conversations given a user fid:
-```POST``` to ```/api/conversations:fid```
+```GET``` to ```/api/conversations:fid```
 
 ## To delete a user:
 ```DELETE``` to ```/api/users:fid*```. 
