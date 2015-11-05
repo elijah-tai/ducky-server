@@ -31,15 +31,13 @@ app.get('/api/requests', requestsController.list)
 app.post('/api/requests', requestsController.create)
 app.delete('/api/requests:rid', requestsController.delete)
 
-
 app.get('/api/users', usersController.list)
+app.get('/api/users:fid', usersController.findConvos)
 app.post('/api/users', usersController.create)
 app.delete('/api/users:fid', usersController.delete)
 
-
 app.get('/api/conversations', conversationsController.list)
 app.post('/api/conversations', conversationsController.create)
-
 app.post('/api/conversations:cid', conversationsController.add) // adds message to convo
 app.delete('/api/conversations:cid', conversationsController.delete)
 

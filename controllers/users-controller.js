@@ -1,6 +1,7 @@
 'use strict'
 
-var User = require('../models/user')
+var User = require('../models/user'),
+		Conversation = require('../models/conversation')
 
 module.exports.create = function (req, res) {
 	var user = new User(req.body)
@@ -13,6 +14,22 @@ module.exports.list = function (req, res) {
 	User.find({}, function (err, results) {
 		res.json(results)
 	})
+}
+
+
+module.exports.findConvos = function (req, res) {
+	if (req.params.fid !== null || req.params.fid !== undefined) {
+		User.findOne({ fid: req.params.fid }, "p.c", function (err, userConvos) {
+			if (err) {
+				res.sendStatus(500)
+			}
+			else {
+				Conversation.find({cid: {$in: userConvos.p.c}}, function (err, docs) {
+					res.json(docs)
+				})
+			}
+		})
+	}
 }
 
 module.exports.delete = function (req, res) {

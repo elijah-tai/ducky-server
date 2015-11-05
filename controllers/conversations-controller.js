@@ -83,7 +83,6 @@ module.exports.add = function (req, res) {
 				res.sendStatus(500)
 			}
 			else {
-				console.log(req.body)
 				conversation.m.addToSet(message)
 				conversation.save(function (err, result) {
 					res.json(conversation)

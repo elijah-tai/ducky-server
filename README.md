@@ -30,7 +30,7 @@ var Request = new Schema({
 
 ## To delete a request:
 
-```DELETE``` to ```/api/requests:_id*```. 
+```DELETE``` to ```/api/requests:rid*```. 
 
 ## To add a user:
 
@@ -52,8 +52,11 @@ var User = new Schema({
 ## To see all users:
 ```GET``` to ```/api/users```.
 
+## To see all conversations given a user fid:
+```POST``` to ```/api/conversations:fid```
+
 ## To delete a user:
-```DELETE``` to ```/api/users:_id*```. 
+```DELETE``` to ```/api/users:fid*```. 
 
 ## To create a new conversation:
 ```POST``` to ```/api/conversations``` with following schema below. No need for anything in ```m``` (messages).
@@ -73,7 +76,7 @@ var Conversation = new Schema({
 ```GET``` to ```/api/conversations```.
 
 ## To add a message to a conversation:
-```POST``` to ```/api/conversations:_id*``` with following message schema:
+```POST``` to ```/api/conversations:cid*``` with following message schema:
 
 ```
 var Message = new Schema({
@@ -85,7 +88,7 @@ var Message = new Schema({
 ```
 
 ## To delete a message from a conversation:
-```DELETE``` to ```/api/conversations:_id*```. 
+```DELETE``` to ```/api/conversations:cid*```. 
 
 ### TODO:
 - [ ] Put Objectids of Users instead of strings for Users in Conversation/Messsage/Request schemas instead of strings
