@@ -8,10 +8,10 @@ var mongoose = require('mongoose'),
 var User = new Schema({
 	fn: String, // first name
 	fid: Number, // facebook ID
-	pp: String // profile picture URL
+	pp: String, // profile picture URL
 	p: {
-		r: [Request.schema], // IDs of requests
-		c: [Conversation.schema] // IDs of conversations
+		r: [Number], // IDs of requests
+		c: [Number] // IDs of conversations
 	}
 })
 

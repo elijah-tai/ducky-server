@@ -5,8 +5,8 @@ var mongoose = require('mongoose'),
 		Schema = mongoose.Schema
 
 var Message = new Schema({
-	f: String, // User ID from
-	t: String, // User ID to
+	f: Number, // User ID from
+	t: Number, // User ID to
 	c: String, // message content
 	time: { type: Date, default: Date.now }
 })

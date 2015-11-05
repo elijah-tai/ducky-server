@@ -6,8 +6,9 @@ var mongoose = require('mongoose'),
 		Schema = mongoose.Schema
 
 var Conversation = new Schema({
-	i: String, // User ID who initiated
-	r: String, // User ID who received
+	cid: Number, // conversation ID
+	i: Number, // User ID who initiated
+	r: Number, // User ID who received
 	rid: String, // id of associated request
 	m: [Message.schema], // associated messages
 	time: { type: Date, default: Date.now }

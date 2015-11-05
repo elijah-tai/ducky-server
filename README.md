@@ -9,7 +9,20 @@ supervisor server.js # Should be running on port 3000
 
 ## To create a request:
 
-```POST``` to ```/api/requests``` with ```x-www-form-urlencoded``` body with ```requestContent, asker, and location``` as keys and string values.
+```POST``` to ```/api/requests```.
+
+Mongoose Request Schema:
+```
+var Request = new Schema({
+	// need to add date
+	rid: Number, // Request ID
+	a: Number, // asker user id
+	rc: String, // request content
+	l: String, // request location - might be lat/long
+	c: [Number], // ids of associated conversations
+	time: { type: Date, default: Date.now }
+})
+```
 
 ## To see all requests:
 
@@ -28,10 +41,10 @@ Mongoose User Schema:
 var User = new Schema({
 	fn: String, // first name
 	fid: Number, // facebook ID
-	pp: String // profile picture URL
+	pp: String, // profile picture URL
 	p: {
-		r: [Request.schema], // IDs of requests
-		c: [Conversation.schema] // IDs of conversations
+		r: [Number], // IDs of requests
+		c: [Number] // IDs of conversations
 	}
 })
 ```
@@ -47,8 +60,9 @@ var User = new Schema({
 
 ```
 var Conversation = new Schema({
-	i: String, // User ID who initiated
-	r: String, // User ID who received
+	cid: Number, // conversation ID
+	i: Number, // User ID who initiated
+	r: Number, // User ID who received
 	rid: String, // id of associated request
 	m: [Message.schema], // associated messages
 	time: { type: Date, default: Date.now }
@@ -63,8 +77,8 @@ var Conversation = new Schema({
 
 ```
 var Message = new Schema({
-	f: String, // User ID from
-	t: String, // User ID to
+	f: Number, // User ID from
+	t: Number, // User ID to
 	c: String, // message content
 	time: { type: Date, default: Date.now }
 })

@@ -29,19 +29,19 @@ app.use('/api', routes)
 
 app.get('/api/requests', requestsController.list)
 app.post('/api/requests', requestsController.create)
-app.delete('/api/requests:_id', requestsController.delete)
+app.delete('/api/requests:rid', requestsController.delete)
 
 
 app.get('/api/users', usersController.list)
 app.post('/api/users', usersController.create)
-app.delete('/api/users:_id', usersController.delete)
+app.delete('/api/users:fid', usersController.delete)
 
 
 app.get('/api/conversations', conversationsController.list)
 app.post('/api/conversations', conversationsController.create)
 
-app.post('/api/conversations:_id', conversationsController.add) // adds message to convo
-app.delete('/api/conversations:_id', conversationsController.delete)
+app.post('/api/conversations:cid', conversationsController.add) // adds message to convo
+app.delete('/api/conversations:cid', conversationsController.delete)
 
 // error hndlers
 app.use(function(req, res, next) {

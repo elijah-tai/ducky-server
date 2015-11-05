@@ -16,8 +16,8 @@ module.exports.list = function (req, res) {
 }
 
 module.exports.delete = function (req, res) {
-	if (req.params._id !== null || req.params._id !== undefined) {
-		User.remove({ _id: req.params._id}, function (err) {
+	if (req.params.fid !== null || req.params.fid !== undefined) {
+		User.remove({ fid: req.params.fid}, function (err) {
 			res.sendStatus(200)
 		})
 	}
