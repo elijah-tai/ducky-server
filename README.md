@@ -17,6 +17,7 @@ var Request = new Schema({
 	// need to add date
 	rid: Number, // Request ID
 	a: Number, // asker user id
+	t: String, // request title
 	rc: String, // request content
 	l: String, // request location - might be lat/long
 	c: [Number], // ids of associated conversations
@@ -53,10 +54,13 @@ var User = new Schema({
 ```GET``` to ```/api/users```.
 
 ## To see all conversations given a user fid:
-```GET``` to ```/api/conversations:fid```
+```GET``` to ```/api/users:fid```
 
 ## To delete a user:
 ```DELETE``` to ```/api/users:fid*```. 
+
+## To find a user:
+```GET
 
 ## To create a new conversation:
 ```POST``` to ```/api/conversations``` with following schema below. No need for anything in ```m``` (messages).

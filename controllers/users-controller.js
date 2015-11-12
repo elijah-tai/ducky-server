@@ -18,7 +18,7 @@ module.exports.list = function (req, res) {
 
 
 module.exports.findConvos = function (req, res) {
-	if (req.params.fid !== null || req.params.fid !== undefined) {
+	if (req.params.fid !== null || req.params.fid !== undefined ) {
 		User.findOne({ fid: req.params.fid }, "p.c", function (err, userConvos) {
 			if (err) {
 				res.sendStatus(500)
@@ -27,6 +27,19 @@ module.exports.findConvos = function (req, res) {
 				Conversation.find({cid: {$in: userConvos.p.c}}, function (err, docs) {
 					res.json(docs)
 				})
+			}
+		})
+	}
+}
+
+module.exports.findUser = function (req, res) {
+	if (req.params.fid !== null || req.params.fid !== undefined) {
+		User.findOne({ fid: req.params.fid }, function (err, user) {
+			if (err) {
+				res.sendStatus(500)
+			}
+			else {
+				res.json(user)
 			}
 		})
 	}

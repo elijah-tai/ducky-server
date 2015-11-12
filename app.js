@@ -32,7 +32,8 @@ app.post('/api/requests', requestsController.create)
 app.delete('/api/requests:rid', requestsController.delete)
 
 app.get('/api/users', usersController.list)
-app.get('/api/users:fid', usersController.findConvos)
+app.get('/api/users/findConvos/:fid', usersController.findConvos)
+app.get('/api/users/findUser/:fid', usersController.findUser)
 app.post('/api/users', usersController.create)
 app.delete('/api/users:fid', usersController.delete)
 
