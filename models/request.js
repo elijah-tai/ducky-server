@@ -8,6 +8,7 @@ var Request = new Schema({
 	// need to add date
 	rid: Number, // Request ID
 	a: Number, // asker user id
+	t: String, // request title
 	rc: String, // request content
 	l: String, // request location - might be lat/long
 	c: [Number], // ids of associated conversations
