@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
 var mongoose = require('mongoose'),
-		Request = require('./request'),
-		Conversation = require('./conversation'),
-		Schema = mongoose.Schema
+		Request = require('./../request/request.model'),
+		Conversation = require('./../conversation/conversation.model'),
+		Schema = mongoose.Schema;
 
 var User = new Schema({
 	fn: String, // first name
@@ -13,6 +13,6 @@ var User = new Schema({
 		r: [Number], // IDs of requests
 		c: [Number] // IDs of conversations
 	}
-})
+});
 
-module.exports = mongoose.model('users', User)
+module.exports = mongoose.model('users', User);

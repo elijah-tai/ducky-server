@@ -1,12 +1,12 @@
-'use strict'
+'use strict';
 
 var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
-    User = require('../models/user.js')
+    User = require('../models/user.model.js');
 
 router.get('/', function(req, res) {
   res.json({ message: 'Welcome to the Ducky API.'})
-})
+});
 
-module.exports = router
+module.exports = router;

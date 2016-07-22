@@ -1,6 +1,9 @@
 # ducky-server
 
+### NOTE: I'm coming back to this one to clean up and apply what I've learned over the past couple of months, and to also write tests for. Current version is _not final_.
+
 Core backend server for Ducky in Node.js. See all routes in ```./app.js```.
+
 
 ```
 npm install
