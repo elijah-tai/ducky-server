@@ -1,41 +1,109 @@
+/**
+ * Using Rails-like standard naming convention for endpoints.
+ * GET     /api/tasks              ->  index
+ * POST    /api/tasks              ->  create
+ * GET     /api/tasks/:id          ->  show
+ * PUT     /api/tasks/:id          ->  update
+ * DELETE  /api/tasks/:id          ->  destroy
+ */
+
 'use strict';
 
-var Request = require('request'),
-	User = require('../../models/user');
+import _ from 'lodash';
+import logger from 'winston';
+import mongoose from 'mongoose';
 
-module.exports.create = function (req, res) {
-	var request = new Request(req.body);
-	User.findOne( {fid: req.body.a }, function (err, user) {
-		if (err) {
-			res.sendStatus(500)
+function respondWithResult(res, statusCode) {
+	statusCode = statusCode || 200;
+	return function(entity) {
+		if (entity) {
+			res.status(statusCode).json(entity);
+			return res;
 		}
-		else {
-			user.p.r.addToSet(req.body.rid);
-			console.log(user);
-			user.save(function (err, result) {
-				if (err) {
-					res.sendStatus(500)
-				}
-				else {
-					request.save(function (err, result) {
-						res.json(result)
-					})
-				}
-			})
+	};
+}
+
+function saveUpdates(updates) {
+	return function(entity) {
+		var updated = _.extend(entity, updates);
+		return updated.save()
+			.then(updated => {
+				logger.info('requestController.saveUpdates - updated: ' + updated);
+				return updated;
+			});
+	};
+}
+
+function removeEntity(res) {
+	return function(entity) {
+		if (entity) {
+			return entity.remove()
+				.then(() => {
+					res.status(204).end();
+					return res;
+				});
 		}
-	})
-};
+	};
+}
 
-module.exports.list = function (req, res) {
-	Request.find({}, function (err, results) {
-		res.json(results)
-	})
-};
+function handleEntityNotFound(res) {
+	return function(entity) {
+		if (!entity) {
+			res.status(404).end();
+			return null;
+		}
+		return entity;
+	};
+}
 
-module.exports.delete = function (req, res) {
-	if (req.params.rid !== null || req.params.rid !== undefined) {
-		Request.remove({ rid: req.params.rid}, function (err) {
-			res.sendStatus(200)
-		})
+function handleError(res, statusCode) {
+	statusCode = statusCode || 500;
+	return function(err) {
+		res.status(statusCode).send(err);
+	};
+}
+
+// Gets a list of Requests
+export function index(req, res) {
+	return Request.find().exec()
+		.then(respondWithResult(res))
+		.catch(handleError(res));
+}
+
+// Gets a single Request from the DB
+export function show(req, res) {
+	return Request.findById(req.params.id).exec()
+		.then(handleEntityNotFound(res))
+		.then(respondWithResult(res))
+		.catch(handleError(res));
+}
+
+// Creates a new Request in the DB
+export function create(req, res) {
+	var newRequest = new Request(req.body);
+	logger.info('requestController.create - req.body: ' + req.body);
+	return newRequest.save()
+		.then(respondWithResult(res, 201))
+		.catch(handleError(res));
+}
+
+// Updates an existing Request in the DB
+export function update(req, res) {
+	if (req.body._id) {
+		delete req.body._id;
 	}
-};
+	return Request.findById(req.params.id).exec()
+		.then(handleEntityNotFound(res))
+		.then(saveUpdates(req.params.id, req.body))
+		.then(respondWithResult(res))
+		.catch(handleError(res));
+}
+
+// Deletes a Request from the DB
+export function destroy(req, res) {
+
+	return Request.findById(req.params.id).exec()
+		.then(handleEntityNotFound(res))
+		.then(removeEntity(res))
+		.catch(handleError(res));
+}

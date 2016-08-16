@@ -1,55 +1,126 @@
 'use strict';
 
-var User = require('../../models/user'),
-		Conversation = require('../conversation/conversation.model');
+import User from './user.model';
+import passport from 'passport';
+import winston from 'winston';
+import config from '../../config/environment';
+import jwt from 'jsonwebtoken';
 
-module.exports.create = function (req, res) {
-	var user = new User(req.body);
-	user.save(function (err, result) {
-		res.json(result)
-	})
-};
-
-module.exports.list = function (req, res) {
-	User.find({}, function (err, results) {
-		res.json(results)
-	})
-};
-
-
-module.exports.findConvos = function (req, res) {
-	if (req.params.fid !== null || req.params.fid !== undefined ) {
-		User.findOne({ fid: req.params.fid }, "p.c", function (err, userConvos) {
-			if (err) {
-				res.sendStatus(500)
-			}
-			else {
-				Conversation.find({cid: {$in: userConvos.p.c}}, function (err, docs) {
-					res.json(docs)
-				})
-			}
-		})
+function validationError(res, statusCode) {
+	statusCode = statusCode || 422;
+	return function(err) {
+		res.status(statusCode).json(err);
 	}
-};
+}
 
-module.exports.findUser = function (req, res) {
-	if (req.params.fid !== null || req.params.fid !== undefined) {
-		User.findOne({ fid: req.params.fid }, function (err, user) {
-			if (err) {
-				res.sendStatus(500)
-			}
-			else {
-				res.json(user)
-			}
+function handleError(res, statusCode) {
+	statusCode = statusCode || 500;
+	return function(err) {
+		res.status(statusCode).send(err);
+	};
+}
+
+/**
+ * Get list of users
+ * restriction: 'admin'
+ */
+export function index(req, res) {
+	return User.find({}, '-salt -password').exec()
+		.then(users => {
+			res.status(200).json(users);
 		})
-	}
-};
+		.catch(handleError(res));
+}
 
-module.exports.delete = function (req, res) {
-	if (req.params.fid !== null || req.params.fid !== undefined) {
-		User.remove({ fid: req.params.fid}, function (err) {
-			res.sendStatus(200)
+/**
+ * Creates a new user
+ */
+export function create(req, res, next) {
+	var newUser = new User(req.body);
+	newUser.provider = 'local';
+	newUser.role = 'user';
+	newUser.save()
+		.then(function(user) {
+			var token = jwt.sign({ _id: user._id }, config.secrets.session, {
+				expiresIn: 60 * 60 * 5
+			});
+			res.json({ token });
+			return res;
 		})
-	}
-};
+		.catch(validationError(res));
+}
 
+/**
+ * Get a single user
+ */
+export function show(req, res, next) {
+	var userId = req.params.id;
+
+	return User.findById(userId).exec()
+		.then(user => {
+			if (!user) {
+				return res.status(404).end();
+			}
+			res.json(user.profile);
+		})
+		.catch(err => next(err));
+}
+
+/**
+ * Deletes a user
+ * restriction: 'admin'
+ */
+export function destroy(req, res) {
+	return User.findByIdAndRemove(req.params.id).exec()
+		.then(function() {
+			res.status(204).end();
+		})
+		.catch(handleError(res));
+}
+
+/**
+ * Change a users password
+ */
+export function changePassword(req, res, next) {
+	var userId = req.user._id;
+	var oldPass = String(req.body.oldPassword);
+	var newPass = String(req.body.newPassword);
+
+	return User.findById(userId).exec()
+		.then(user => {
+			if (user.authenticate(oldPass)) {
+				user.password = newPass;
+				return user.save()
+					.then(() => {
+						res.status(204).end();
+					})
+					.catch(validationError(res));
+			} else {
+				return res.status(403).end();
+			}
+		});
+}
+
+/**
+ * Get my info
+ */
+export function me(req, res, next) {
+	var userId = req.user._id;
+
+	return User.findOne({ _id: userId }, '-salt -password').exec()
+		.then(user => { // don't ever give out the password or salt
+			if (!user) {
+				return res.status(401).end();
+			}
+			res.json(user);
+			return user;
+		})
+		.catch(err => next(err));
+}
+
+/**
+ * Authentication callback
+ */
+export function authCallback(req, res, next) {
+	res.redirect('/');
+}

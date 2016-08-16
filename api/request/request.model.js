@@ -2,17 +2,27 @@
 
 // request model for mongoose
 var mongoose = require('mongoose'),
-		Schema = mongoose.Schema;
+	Schema = mongoose.Schema;
 
-var Request = new Schema({
-	// need to add date
-	rid: Number, // Request ID
-	a: Number, // asker user id
-	t: String, // request title
-	rc: String, // request content
-	l: String, // request location - might be lat/long
-	c: [Number], // ids of associated conversations
-	time: { type: Date, default: Date.now }
+var RequestSchema = new Schema({
+	creator: {
+		type: Schema.ObjectId,
+		ref: 'User'
+	}, // asker user id
+	title: {
+		type: String,
+		trim: true
+	}, // request title
+	content: {
+		type: String,
+		trim: true
+	}, // request content
+	location: {
+		type: String,
+		trim: true
+	}, // request location POI
+}, {
+	timestamps: true
 });
 
-module.exports = mongoose.model('requests', Request);
+export default mongoose.model('Request', RequestSchema);
